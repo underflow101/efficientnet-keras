@@ -15,8 +15,11 @@ import keras
 from model import efficientNet
 from hyperparameter import NUM_CLASSES, EPOCHS, BATCH_SIZE, WIDTH, HEIGHT, CHANNELS
 
+print("INITIALIZE OBJECT")
 model = efficientNet()
+print("BUILD MODEL")
 model.build(input_shape=(None, HEIGHT, WIDTH, CHANNELS))
+print("SUMMARY MODEL")
 model.summary()
 
 model.save('lpl.h5')

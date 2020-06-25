@@ -62,6 +62,7 @@ class SEBlock(Layer):
 class MBConv(Layer):
     def __init__(self, in_channels, out_channels, expansion_factor, stride, k, drop_connect_rate):
         super(MBConv, self).__init__()
+        print("ONLY INIT PROCESS")
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.stride = stride
@@ -77,6 +78,7 @@ class MBConv(Layer):
         self.dropout = Dropout(rate=drop_connect_rate)
     
     def call(self, inputs, training=None, **kwargs):
+        print("CALL START!!!!")
         x = self.conv1(inputs)
         x = self.bn1(x, training=training)
         x = tf.nn.swish(x)
@@ -91,12 +93,15 @@ class MBConv(Layer):
             if self.drop_connect_rate:
                 x = self.dropout(x, training=training)
             x = tf.keras.layers.add([x, inputs])
+        print("THIS IS TYPE!!!", end=' ')
+        print(type(x))
         return x
         
 def MBConvBlock(in_channels, out_channels, layer, stride, expansion_factor, k, drop_connect_rate):
     block = Sequential()
     
     for i in range(layer):
+        print("BLOCK ADD PROCEDURE")
         if i == 0:
             block.add(MBConv(in_channels=in_channels, out_channels=out_channels, expansion_factor=expansion_factor,
                              stride=stride, k=k, drop_connect_rate=drop_connect_rate))
@@ -113,7 +118,7 @@ def MBConvBlock(in_channels, out_channels, layer, stride, expansion_factor, k, d
 class EfficientNet(tf.keras.Model):
     def __init__(self, width_coefficient, depth_coefficient, dropout_rate, drop_connect_rate=0.2):
         super(EfficientNet, self).__init__()
-        
+        print("EFFICIENTNET CLASS __INIT__")
         self.conv1 = Conv2D(filters=round_filters(32, width_coefficient), kernel_size=(3,3), strides=2, padding='same', use_bias=False)
         self.bn1 = BatchNormalization()
         
@@ -146,6 +151,7 @@ class EfficientNet(tf.keras.Model):
         self.fc = Dense(units=NUM_CLASSES, activation=softmax)
         
     def call(self, inputs, training=None, mask=None):
+        print("EFFICIENTNET CLASS __CALL__")
         x = self.conv1(inputs)
         x = self.bn1(x, training=training)
         x = tf.nn.swish(x)

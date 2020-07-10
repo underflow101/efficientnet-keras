@@ -14,9 +14,6 @@
 ###############################################################################
 
 import h5py
-import os, shutil
-import matplotlib.pyplot as plt
-import math
 
 import tensorflow as tf
 from tensorflow.keras.models import Model
